@@ -27,3 +27,10 @@ System.Security.Policyのクラス使ってないようなので、コメント�
 ## 解決方法
 OtherSettingsのGraphicsAPIsからVulkanを削除。  
 [参考：UnityでVRアプリを作ったら上下が逆転してしまった](https://qiita.com/Ihal/items/5135521915b70d9c0e91)
+
+# カッコ付きのインポートアセットのフォルダがGitでAddしようとしたときにエラーになる
+## エラー内容
+the following problems have occured when adding the files "(X&Y)AAAAAA" did not mach any files.
+
+## 解決方法
+アセット内フォルダに()と&があったのでそこをリネームして再起動。(リネームするだけだとRider側がフォルダ名保持していたため再起動)
