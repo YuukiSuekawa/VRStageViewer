@@ -5,52 +5,67 @@ using UnityEngine;
 
 namespace VRStageViewer
 {
-    public class StageCharaController : MonoBehaviour
+    public class StageCharaController : StageCharaBaseController
     {
+        // TODO NavMeshAgentでのハマりバグ有 調査中
         
-        // TODO とりあえずUnityちゃんのアニメに沿ったものにする
-        // TODO 今後拡張性は考える
+        #region Varialble
         private NavMeshAgent navAgent = null;
         private bool moveTrg = false;
-        private Animator anim = null;
-        
+        [SerializeField] private float navSpeed = 1.0f;
+        [SerializeField] private float walkSpeed = 0.2f;
+        #endregion Variable
 
-        public void MoveStart(Vector3 pointVec)
+        protected override void Start()
         {
-            if (!moveTrg)
-            {
-                MotionStart();
-                navAgent.destination = pointVec;                
-            }
-        }
-
-        private void MotionStart()
-        {
-            anim.SetFloat("Speed", 0.2f);
-            moveTrg = true;
-            navAgent.isStopped = false;
-        }
-
-        private void MotionIdle()
-        {
-            anim.SetFloat("Speed",0.0f);
-            moveTrg = false;
-        }
-
-        // Start is called before the first frame update
-        void Start()
-        {
+            base.Start();
             navAgent = GetComponent<NavMeshAgent>();
-            anim = GetComponent<Animator>();
+            navAgent.speed = navSpeed;
         }
 
-        // Update is called once per frame
-        void Update()
+        protected override void Update()
         {
-            if (moveTrg && navAgent.remainingDistance < 2f)
+            if (moveTrg && navAgent.remainingDistance < 1f)
             {
                 MotionIdle();
             }
         }
+        
+        
+        public override void Move(Vector3 pointVec)
+        {
+            if (moveTrg)
+            {
+                SetMovePoint(pointVec);
+            }
+            else
+            {
+                MotionStart(pointVec,walkSpeed);
+            }
+        }
+
+        public bool IsMoving()
+        {
+            return moveTrg;
+        }
+
+        private void MotionStart(Vector3 pointVec,float speed)
+        {
+            SetMovePoint(pointVec);
+            SetAnimFloat("Speed", speed);
+            moveTrg = true;
+        }
+
+        private void MotionIdle()
+        {
+            SetAnimFloat("Speed",0.0f);
+            moveTrg = false;
+        }
+
+        protected override void SetMovePoint(Vector3 pointVec)
+        {
+            navAgent.destination = pointVec;
+        }
+
     }
 }

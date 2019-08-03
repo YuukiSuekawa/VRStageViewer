@@ -45,7 +45,7 @@ namespace VRStageViewer
         {
             foreach (StageCharaController charaCtrl in characters)
             {
-                charaCtrl.MoveStart(pointVec);
+                charaCtrl.Move(pointVec);
             }
         }
 
