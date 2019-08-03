@@ -51,28 +51,28 @@ namespace VRStageViewer
 
         protected void SetAnimFloat(string paramName, float value)
         {
-            this.anim.SetFloat(paramName,value);
+            anim.SetFloat(paramName,value);
         }
 
         protected void SetAnimInt(string paramName, int value)
         {
-            this.anim.SetInteger(paramName,value);
+            anim.SetInteger(paramName,value);
         }
 
         protected void SetAnimBool(string paramName, bool value)
         {
-            this.anim.SetBool(paramName,value);
+            anim.SetBool(paramName,value);
         }
 
         protected void SetAnimTrigger(string paramName, bool value)
         {
             if (value)
             {
-                this.anim.SetTrigger(paramName);
+                anim.SetTrigger(paramName);
             }
             else
             {
-                this.anim.ResetTrigger(paramName);
+                anim.ResetTrigger(paramName);
             }
         }
     }
