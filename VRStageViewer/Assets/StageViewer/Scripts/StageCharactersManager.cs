@@ -24,7 +24,7 @@ namespace VRStageViewer
             {
                 Console.WriteLine("ロード未完成のためPlayへ");
                 
-                this.CharactersMoveStart(pointVec);
+                this.SetCharactersMove(pointVec);
             }
         }
 
@@ -41,7 +41,7 @@ namespace VRStageViewer
             }
         }
 
-        private void CharactersMoveStart(Vector3 pointVec)
+        public void SetCharactersMove(Vector3 pointVec)
         {
             foreach (StageCharaController charaCtrl in characters)
             {
