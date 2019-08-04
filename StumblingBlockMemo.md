@@ -34,3 +34,19 @@ the following problems have occured when adding the files "(X&Y)AAAAAA" did not 
 
 ## 解決方法
 アセット内フォルダに()と&があったのでそこをリネームして再起動。(リネームするだけだとRider側がフォルダ名保持していたため再起動)
+
+# 実機の時にposition指定の移動がうまく動かない
+## 内容
+プレイヤーオブジェクト(OVRPlayerController)のTransformのpositionに移動箇所の位置を指定しても何故か変な場所に動いてしまう。
+
+## 解決方法
+OVRPlayerController内で常時カメラの位置をUpdateかけているため、一時的にOVRPlayerControllerをdisable状態にする。
+移動処理後、enableに戻す。
+
+# 実機のみ移動直後のLookAtで向きを変えると傾いていく
+## 内容
+中心を向かせるためにVector3.zeroで指定していると移動するたびに傾きが反映されてしまっていた。
+
+## 解決方法
+自分の高さと同じようにするためにnew Vector3(0,自身のオブジェクトのY,0)として水平に向くように修正。
+

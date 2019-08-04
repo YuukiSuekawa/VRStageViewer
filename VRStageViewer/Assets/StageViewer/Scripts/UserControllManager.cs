@@ -14,6 +14,8 @@ namespace VRStageViewer
 
         [SerializeField] private Vector3[] positions;
         private int posId;
+
+        private bool isPushed = false;
         
         private OVRPlayerController ovrPlayerController = null;
         private Transform myTrans;
@@ -28,21 +30,33 @@ namespace VRStageViewer
             console = OVRDebugConsole.instance;
 #endif
             myTrans = GetComponent<Transform>();
+            // 中心に向かせる
             myTrans.LookAt(Vector3.zero);
         }
 
         void Update()
         {
-            // TODO ここのボタンの反応良すぎるから時間制限設けたい
             
-            if (OVRInput.GetDown(OVRInput.Button.One) || Input.GetKey(KeyCode.A))
+            if (!isPushed && (OVRInput.GetDown(OVRInput.Button.One) || Input.GetKey(KeyCode.A)))
             {
+                isPushed = true;
                 SetApproach();
             }
-
-            if (OVRInput.GetDown(OVRInput.Button.Two) || Input.GetKey(KeyCode.Z))
+            
+            if(isPushed && (OVRInput.GetUp(OVRInput.Button.One) || Input.GetKeyUp(KeyCode.A)))
             {
+                isPushed = false;
+            }
+
+            if (!isPushed && (OVRInput.GetDown(OVRInput.Button.Two) || Input.GetKey(KeyCode.Z)))
+            {
+                isPushed = true;
                 ChangeViewPosition();
+            }
+            
+            if(isPushed && (OVRInput.GetUp(OVRInput.Button.Two) || Input.GetKeyUp(KeyCode.Z)))
+            {
+                isPushed = false;
             }
 
             if (OVRInput.GetDown(OVRInput.Button.Three))
@@ -67,6 +81,12 @@ namespace VRStageViewer
 #if DEBUG
             console.AddMessage("ChangeViewPosition", Color.white);
 #endif
+
+            // MEMO PlayerControllerをONにしたまま移動させようとすると、意図しない動きになってしまう
+            // MEMO そのため、一度dissable状態にして処理後に戻す
+            // リニア移動を一旦停止
+            ovrPlayerController.enabled = false;
+
             // 中心へ向くようにする
             if (posId < positions.Length - 1)
             {
@@ -80,8 +100,11 @@ namespace VRStageViewer
 #if DEBUG
             console.AddMessage("" + myTrans.position, Color.white);
 #endif
-            // TODO VRでやったときになんかすごい方向になってしまうから別の方法を考える
-//            myTrans.LookAt(Vector3.zero);
+            // VRでやったときにLockAtでどんどん傾くので正面向くよう修正
+            myTrans.LookAt(new Vector3(0,myTrans.position.y,0));
+
+            // リニア移動復活
+            ovrPlayerController.enabled = true;
         }
     }
 }
