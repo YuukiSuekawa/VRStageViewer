@@ -4,14 +4,21 @@ using OVRTouchSample;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using VolumetricLines;
 
 namespace VRStageViewer
 {
     public class UserControllManager : MonoBehaviour
     {
+        #region Variables
         public class Vector3Callback : UnityEvent<Vector3>{}
         public Vector3Callback approachCallbackEvent = new Vector3Callback();
 
+        [SerializeField] private VolumetricLineBehavior leftLaser;
+        [SerializeField] private VolumetricLineBehavior rightLaser;
+        private int leftLaserColorId = 0;
+        private int rightLaserColorId = 0;
+        
         [SerializeField] private Vector3[] positions;
         private int posId;
 
@@ -19,9 +26,24 @@ namespace VRStageViewer
         
         private OVRPlayerController ovrPlayerController = null;
         private Transform myTrans;
+
+        private Vector3 centerPos;
+
+        private static readonly Color[] laserColors =
+        {
+            Color.red,
+            Color.magenta,
+            Color.yellow,
+            Color.green,
+            Color.cyan,
+            Color.blue,
+        };
+        
 #if DEBUG
         private OVRDebugConsole console;
 #endif
+        #endregion Variables
+        
         void Start()
         {
             posId = 0;
@@ -30,13 +52,18 @@ namespace VRStageViewer
             console = OVRDebugConsole.instance;
 #endif
             myTrans = GetComponent<Transform>();
+            centerPos = new Vector3(0,myTrans.position.y,0);
             // 中心に向かせる
-            myTrans.LookAt(Vector3.zero);
+            myTrans.LookAt(centerPos);
         }
 
         void Update()
         {
-            
+            ControllerInputUpdate();
+        }
+
+        private void ControllerInputUpdate()
+        {
             if (!isPushed && (OVRInput.GetDown(OVRInput.Button.One) || Input.GetKey(KeyCode.A)))
             {
                 isPushed = true;
@@ -51,7 +78,7 @@ namespace VRStageViewer
             if (!isPushed && (OVRInput.GetDown(OVRInput.Button.Two) || Input.GetKey(KeyCode.Z)))
             {
                 isPushed = true;
-                ChangeViewPosition();
+                ChangeLaserColor(false);
             }
             
             if(isPushed && (OVRInput.GetUp(OVRInput.Button.Two) || Input.GetKeyUp(KeyCode.Z)))
@@ -59,11 +86,26 @@ namespace VRStageViewer
                 isPushed = false;
             }
 
-            if (OVRInput.GetDown(OVRInput.Button.Three))
+            if (!isPushed && (OVRInput.GetDown(OVRInput.Button.Three) || Input.GetKey(KeyCode.X)))
             {
-#if DEBUG
-                console.AddMessage("Button Three", Color.white);
-#endif                
+                isPushed = true;
+                ChangeViewPosition();
+            }
+            
+            if(isPushed && (OVRInput.GetUp(OVRInput.Button.Three) || Input.GetKeyUp(KeyCode.X)))
+            {
+                isPushed = false;
+            }
+            
+            if (!isPushed && (OVRInput.GetDown(OVRInput.Button.Four) || Input.GetKey(KeyCode.C)))
+            {
+                isPushed = true;
+                ChangeLaserColor(true);
+            }
+            
+            if(isPushed && (OVRInput.GetUp(OVRInput.Button.Four) || Input.GetKeyUp(KeyCode.C)))
+            {
+                isPushed = false;
             }
         }
 
@@ -87,7 +129,7 @@ namespace VRStageViewer
             // リニア移動を一旦停止
             ovrPlayerController.enabled = false;
 
-            // 中心へ向くようにする
+            // 位置移動
             if (posId < positions.Length - 1)
             {
                 posId++;
@@ -100,11 +142,41 @@ namespace VRStageViewer
 #if DEBUG
             console.AddMessage("" + myTrans.position, Color.white);
 #endif
-            // VRでやったときにLockAtでどんどん傾くので正面向くよう修正
-            myTrans.LookAt(new Vector3(0,myTrans.position.y,0));
+            // 中心へ向くようにする
+            myTrans.LookAt(centerPos);
 
             // リニア移動復活
             ovrPlayerController.enabled = true;
+        }
+
+        private void ChangeLaserColor(bool leftFlg)
+        {
+            VolumetricLineBehavior changeLaser = rightLaser;
+            int id = rightLaserColorId;
+            if (leftFlg)
+            {
+                changeLaser = leftLaser;
+                id = leftLaserColorId;
+            }
+
+            if (id < laserColors.Length - 1)
+            {
+                id += 1;
+            }
+            else
+            {
+                id = 0;
+            }
+            changeLaser.LineColor = laserColors[id];
+
+            if (leftFlg)
+            {
+                leftLaserColorId = id;
+            }
+            else
+            {
+                rightLaserColorId = id;
+            }
         }
     }
 }
