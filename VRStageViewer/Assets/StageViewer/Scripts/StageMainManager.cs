@@ -1,24 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace VRStageViewer
 {
     public class StageMainManager : MonoBehaviour
     {
-        // TODO これでこのシーンにおける全体統括命令を出す
-        // TODO 細かい管理は各管理クラスに任せる
-        // TODO ここでやるのは「開始」「終了」の管理くらい
+        private OVRDebugConsole console;
+
         [SerializeField] private StageCharactersManager charaManager;
         [SerializeField] private StageFieldManager fieldManager;
+        [SerializeField] private UserControllManager userCtrlManager;
 
-        // Start is called before the first frame update
+        
         void Start()
         {
+#if DEBUG
+            console = OVRDebugConsole.instance;
+            console.AddMessage("ここでSetPressOneCallBackは実行している",Color.white);
+#endif
+            charaManager.Init(null,fieldManager.GetMovePoint());
+            SetEvent();
             StartCoroutine(MoveLoop());
         }
 
-        // Update is called once per frame
         void Update()
         {
             
@@ -30,8 +36,27 @@ namespace VRStageViewer
             while (true)
             {
                 yield return new WaitForSeconds(6f);
-                charaManager.Init(null,fieldManager.GetMovePoint());
+                charaManager.SetCharactersMove(fieldManager.GetMovePoint());
             }
         }
+        
+        
+        #region CharaEvent
+
+        private void SetEvent()
+        {
+            userCtrlManager.approachCallbackEvent.AddListener(UserApproachToChara);
+        }
+
+
+        public void UserApproachToChara(Vector3 pointVec)
+        {
+            console.AddMessage("キャラへのApproach",Color.white);
+            charaManager.SetCharactersMove(pointVec);
+        }
+        #endregion CharaEvent
+        
+        #region StageEvent
+        #endregion StageEvent
     }
 }
