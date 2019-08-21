@@ -2,6 +2,8 @@
 OculusQuest向けVRで3Dのステージを観覧できるシステム。  
 ゲーム内の一つの要素として将来的に使えたい。
 
+[![](https://github.com/YuukiSuekawa/TestRepository/blob/master/2019-08-20_005908.png?raw=true)](https://www.facebook.com/ys.1025/videos/2953826551509193/)
+
 # 実装済
 ## 席を移動・指定するシステム
 + コントローラによる位置移動
