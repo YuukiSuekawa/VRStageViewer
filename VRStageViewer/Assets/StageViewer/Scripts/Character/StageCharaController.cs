@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.AI;
 using UnityEngine;
@@ -20,6 +21,7 @@ namespace VRStageViewer
         {
             base.Start();
             navAgent = GetComponent<NavMeshAgent>();
+            Debug.Log("エージェント " + navAgent);
             navAgent.speed = navSpeed;
         }
 
@@ -64,7 +66,8 @@ namespace VRStageViewer
 
         protected override void SetMovePoint(Vector3 pointVec)
         {
-            navAgent.destination = pointVec;
+            if(navAgent != null)
+                navAgent.destination = pointVec;
         }
 
     }
