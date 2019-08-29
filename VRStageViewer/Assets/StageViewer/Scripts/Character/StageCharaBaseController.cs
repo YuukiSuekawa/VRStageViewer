@@ -12,10 +12,14 @@ namespace VRStageViewer
             get { return anim; }
         }
         #endregion Variable
-        
-        protected virtual void Start()
+
+        protected virtual void Awake()
         {
             anim = GetComponent<Animator>();
+        }
+
+        protected virtual void Start()
+        {
         }
 
         protected virtual void Update()
