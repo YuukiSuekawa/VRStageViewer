@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.AI;
 using UnityEngine;
@@ -16,11 +17,17 @@ namespace VRStageViewer
         [SerializeField] private float walkSpeed = 0.2f;
         #endregion Variable
 
+        protected override void Awake()
+        {
+            base.Awake();
+            navAgent = GetComponent<NavMeshAgent>();
+            navAgent.speed = navSpeed;
+        }
+
         protected override void Start()
         {
             base.Start();
-            navAgent = GetComponent<NavMeshAgent>();
-            navAgent.speed = navSpeed;
+            
         }
 
         protected override void Update()
@@ -56,6 +63,12 @@ namespace VRStageViewer
             moveTrg = true;
         }
 
+        private void MotionAppeal()
+        {
+            // todo アピール用のモーション実行
+            // todo フリーモーションよりもランク上にする
+        }
+
         private void MotionIdle()
         {
             SetAnimFloat("Speed",0.0f);
@@ -64,7 +77,8 @@ namespace VRStageViewer
 
         protected override void SetMovePoint(Vector3 pointVec)
         {
-            navAgent.destination = pointVec;
+            if(navAgent != null)
+                navAgent.destination = pointVec;
         }
 
     }

@@ -12,10 +12,14 @@ namespace VRStageViewer
             get { return anim; }
         }
         #endregion Variable
-        
-        protected virtual void Start()
+
+        protected virtual void Awake()
         {
             anim = GetComponent<Animator>();
+        }
+
+        protected virtual void Start()
+        {
         }
 
         protected virtual void Update()
@@ -51,17 +55,20 @@ namespace VRStageViewer
 
         protected void SetAnimFloat(string paramName, float value)
         {
-            anim.SetFloat(paramName,value);
+            if(anim != null)
+                anim.SetFloat(paramName,value);
         }
 
         protected void SetAnimInt(string paramName, int value)
         {
-            anim.SetInteger(paramName,value);
+            if(anim != null)
+                anim.SetInteger(paramName,value);
         }
 
         protected void SetAnimBool(string paramName, bool value)
         {
-            anim.SetBool(paramName,value);
+            if(anim != null)
+                anim.SetBool(paramName,value);
         }
 
         protected void SetAnimTrigger(string paramName, bool value)
