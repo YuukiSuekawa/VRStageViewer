@@ -58,6 +58,12 @@ namespace VRStageViewer
             moveTrg = true;
         }
 
+        private void MotionAppeal()
+        {
+            // todo アピール用のモーション実行
+            // todo フリーモーションよりもランク上にする
+        }
+
         private void MotionIdle()
         {
             SetAnimFloat("Speed",0.0f);
