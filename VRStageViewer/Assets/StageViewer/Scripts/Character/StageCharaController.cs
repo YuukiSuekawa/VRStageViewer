@@ -17,12 +17,17 @@ namespace VRStageViewer
         [SerializeField] private float walkSpeed = 0.2f;
         #endregion Variable
 
+        protected override void Awake()
+        {
+            base.Awake();
+            navAgent = GetComponent<NavMeshAgent>();
+            navAgent.speed = navSpeed;
+        }
+
         protected override void Start()
         {
             base.Start();
-            navAgent = GetComponent<NavMeshAgent>();
-            Debug.Log("エージェント " + navAgent);
-            navAgent.speed = navSpeed;
+            
         }
 
         protected override void Update()
