@@ -45,13 +45,16 @@ namespace VRStageViewer
         
         public override void Move(Vector3 pointVec)
         {
+            // todo ここの制御を変えていきたい
+            // todo ストックした動作を処理していく形にしていきたい
             if (moveTrg)
             {
                 SetMovePoint(pointVec);
             }
             else
             {
-                MotionStart(pointVec,walkSpeed);
+                
+                MotionWalkRun(pointVec,walkSpeed);
             }
         }
 
@@ -60,7 +63,7 @@ namespace VRStageViewer
             return moveTrg;
         }
 
-        private void MotionStart(Vector3 pointVec,float speed)
+        private void MotionWalkRun(Vector3 pointVec,float speed)
         {
             SetMovePoint(pointVec);
             SetAnimFloat(ANIM_SPEED, speed);
@@ -71,6 +74,7 @@ namespace VRStageViewer
         {
             // todo アピール用のモーション実行
             // todo フリーモーションよりもランク上にする
+            // todo 一度だけ動かしてそのあとは切る
         }
 
         private void MotionIdle()
