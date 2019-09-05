@@ -17,6 +17,10 @@ namespace VRStageViewer
         [SerializeField] private float walkSpeed = 0.2f;
         #endregion Variable
 
+        private const string ANIM_REST = "Rest";
+        private const string ANIM_JUMP = "Jump";
+        private const string ANIM_SPEED = "Speed";
+
         protected override void Awake()
         {
             base.Awake();
@@ -59,7 +63,7 @@ namespace VRStageViewer
         private void MotionStart(Vector3 pointVec,float speed)
         {
             SetMovePoint(pointVec);
-            SetAnimFloat("Speed", speed);
+            SetAnimFloat(ANIM_SPEED, speed);
             moveTrg = true;
         }
 
@@ -71,7 +75,7 @@ namespace VRStageViewer
 
         private void MotionIdle()
         {
-            SetAnimFloat("Speed",0.0f);
+            SetAnimFloat(ANIM_SPEED,0.0f);
             moveTrg = false;
         }
 
