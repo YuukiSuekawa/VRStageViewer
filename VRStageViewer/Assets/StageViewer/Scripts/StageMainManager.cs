@@ -53,7 +53,7 @@ namespace VRStageViewer
         public void UserApproachToChara(Vector3 pointVec)
         {
             console.AddMessage("キャラへのApproach",Color.white);
-            charaManager.SetCharactersMove(pointVec);
+            charaManager.SetCharactersAppeal(pointVec);
         }
         #endregion CharaEvent
         
