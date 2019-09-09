@@ -6,16 +6,21 @@ namespace VRStageViewer
     {
         #region Variable
 
-        private Animator anim = null;
+        private Animator m_anim = null;
         protected Animator Anim
         {
-            get { return anim; }
+            get { return m_anim; }
+        }
+
+        protected AnimatorStateInfo AnimState
+        {
+            get { return m_anim.GetCurrentAnimatorStateInfo(0); }
         }
         #endregion Variable
 
         protected virtual void Awake()
         {
-            anim = GetComponent<Animator>();
+            m_anim = GetComponent<Animator>();
         }
 
         protected virtual void Start()
@@ -23,11 +28,6 @@ namespace VRStageViewer
         }
 
         protected virtual void Update()
-        {
-            
-        }
-
-        public virtual void Move(Vector3 pointVec)
         {
             
         }
@@ -55,31 +55,39 @@ namespace VRStageViewer
 
         protected void SetAnimFloat(string paramName, float value)
         {
-            if(anim != null)
-                anim.SetFloat(paramName,value);
+            if(m_anim != null)
+                m_anim.SetFloat(paramName,value);
+        }
+
+        protected float GetAnimFloat(string paramName)
+        {
+            if (m_anim != null)
+                return m_anim.GetFloat(paramName);
+
+            return -1f;
         }
 
         protected void SetAnimInt(string paramName, int value)
         {
-            if(anim != null)
-                anim.SetInteger(paramName,value);
+            if(m_anim != null)
+                m_anim.SetInteger(paramName,value);
         }
 
         protected void SetAnimBool(string paramName, bool value)
         {
-            if(anim != null)
-                anim.SetBool(paramName,value);
+            if(m_anim != null)
+                m_anim.SetBool(paramName,value);
         }
 
         protected void SetAnimTrigger(string paramName, bool value)
         {
             if (value)
             {
-                anim.SetTrigger(paramName);
+                m_anim.SetTrigger(paramName);
             }
             else
             {
-                anim.ResetTrigger(paramName);
+                m_anim.ResetTrigger(paramName);
             }
         }
     }

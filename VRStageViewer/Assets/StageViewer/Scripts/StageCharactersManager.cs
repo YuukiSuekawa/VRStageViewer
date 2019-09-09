@@ -49,6 +49,14 @@ namespace VRStageViewer
             }
         }
 
+        public void SetCharactersAppeal(Vector3 pointVec)
+        {
+            foreach (StageCharaController charaCtrl in characters)
+            {
+                charaCtrl.Move(pointVec,true);
+            }
+        }
+
         // Start is called before the first frame update
         void Start()
         {
